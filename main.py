@@ -276,23 +276,23 @@ def _desenhar_hud(canvas, estado: Estado):
         y += 22
 
     if estado.modo == "calibracao":
-        linha("=== CALIBRAÇÃO ===", (0, 220, 255), 0.65, 2)
-        linha("Clique em 2 pontos conhecidos da régua", (200,200,200))
+        linha("CALIBRACAO", (0, 220, 255), 0.65, 2)
+        linha("Clique em 2 pontos conhecidos da regua", (200,200,200))
         linha(f"Pontos selecionados: {len(estado.cal_pts)}/2")
         if len(estado.cal_pts) == 2:
             dx = estado.cal_pts[1][0] - estado.cal_pts[0][0]
             dy = estado.cal_pts[1][1] - estado.cal_pts[0][1]
             dist_px = math.sqrt(dx*dx + dy*dy)
-            linha(f"Distância: {dist_px:.1f} px")
+            linha(f"Distancia: {dist_px:.1f} px")
             linha("Digite o valor real (mm) no terminal")
         linha("Z: desfazer ponto | ENTER: confirmar", (180,180,180))
     else:
-        linha("=== MEDIÇÃO ===", (0, 220, 100), 0.65, 2)
+        linha("MEDICAO", (0, 220, 100), 0.65, 2)
         fase_txt = "Fase 1: Topo → Estrangulamento" if estado.fase == 1 \
                    else "Fase 2: Estrangulamento → Extremidade"
         cor_fase = COR_SEGMENTO1 if estado.fase == 1 else COR_SEGMENTO2
         linha(fase_txt, cor_fase, 0.55, 2)
-        linha(f"Plântula atual: #{estado.numero_atual}")
+        linha(f"Plantula atual: #{estado.numero_atual}")
 
         seg1_px = estado.comprimento_px(estado.pontos_seg1)
         seg2_px = estado.comprimento_px(estado.pontos_seg2)
@@ -310,17 +310,17 @@ def _desenhar_hud(canvas, estado: Estado):
             linha(f"Seg2 (laranja): {seg2_px:.0f}px", COR_SEGMENTO2)
             linha(f"Total:          {total_px:.0f}px", COR_TOTAL)
         linha("")
-        linha(f"Plântulas salvas: {len(estado.plantulas)}")
-        linha("ENTER=próxima | Z=desfazer | R=reset", (180,180,180))
+        linha(f"Plantulas salvas: {len(estado.plantulas)}")
+        linha("ENTER=proxima | Z=desfazer | R=reset", (180,180,180))
         linha("S=salvar | +=zoom+ | -=zoom- | Q=sair", (180,180,180))
 
     #Calibração info (canto inferior esquerdo)
     if estado.calibrado:
-        txt = f"Calibração: {estado.mm_por_px*1000:.4f} mm/px  ({estado.cal_mm:.1f}mm ref)"
+        txt = f"Calibracao: {estado.mm_por_px*1000:.4f} mm/px  ({estado.cal_mm:.1f}mm ref)"
         cv2.putText(canvas, txt, (10, hud_h-10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0,220,100), 1)
     else:
-        cv2.putText(canvas, "Sem calibração", (10, hud_h-10),
+        cv2.putText(canvas, "Sem calibracao", (10, hud_h-10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.45, (80,80,200), 1)
 
     # Zoom
@@ -382,7 +382,7 @@ def _aplicar_zoom(estado, fator, cx, cy):
 #Salvar resultados
 def salvar_resultados(estado: Estado):
     if not estado.plantulas:
-        print("[AVISO] Nenhuma plântula para salvar.")
+        print("[AVISO] Nenhuma plantula para salvar.")
         return
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -431,7 +431,7 @@ def salvar_resultados(estado: Estado):
             f.write(f"Calibração: {estado.mm_por_px*1000:.5f} mm/px "
                     f"(referência: {estado.cal_mm:.1f}mm)\n")
         else:
-            f.write("Calibração: não realizada (medidas apenas em pixels)\n")
+            f.write("Calibracao: não realizada (medidas apenas em pixels)\n")
         f.write("=" * 60 + "\n\n")
 
         #Cabeçalho da tabela
@@ -492,9 +492,9 @@ def salvar_resultados(estado: Estado):
 #Loop principal
 def main():
     if len(sys.argv) < 2:
-        print("Uso: python plantula_analyzer.py <caminho_da_imagem>")
+        print("Uso: python main.py <caminho_da_imagem>")
         print("\nExemplo:")
-        print("  python plantula_analyzer.py IMG_3196.png")
+        print("  python main.py IMG_3196.png")
         sys.exit(1)
 
     argumento_img = sys.argv[1]
@@ -505,9 +505,7 @@ def main():
     else:
         img_path = argumento_img
 
-    print(f"\n{'='*60}")
-    print("  ANALISADOR DE PLÂNTULAS DE ALFACE — UNISC")
-    print(f"{'='*60}")
+    print("ANALISADOR DE PLÂNTULAS DE ALFACE — UNISC")
     print(f"Imagem configurada: {img_path}")
 
     try:
